@@ -20,7 +20,7 @@ window::window(int width, int height, const char* title)
   glfwMakeContextCurrent(window_ptr);
   glfwSetFramebufferSizeCallback(window_ptr, framebuffer_size_callback_);
 
-  const bool GL_LOADED = gladLoadGL(glfwGetProcAddress);
+  const bool GL_LOADED = gladLoadGL(glfwGetProcAddress) != 0;
   if (!GL_LOADED)
   {
       glfwTerminate();
