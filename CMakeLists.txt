@@ -29,6 +29,9 @@ add_subdirectory(external/glad)
 
 find_package(glfw3 REQUIRED)
 
+#   GLM
+add_subdirectory(external/glm)
+
 #   ENTT
 add_subdirectory(external/entt)
 
