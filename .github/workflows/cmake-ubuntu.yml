@@ -4,7 +4,10 @@ on:
   pull_request:
     branches:
       - main
-on: workflow_dispatch
+on:
+  push:
+    branches:
+      - local-dependencies
 
 jobs:
   build-and-test:
