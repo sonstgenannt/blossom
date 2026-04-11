@@ -9,7 +9,7 @@
 
 namespace blossom::system
 {
-  class perspective_camera
+  class camera
   {
     public:
       static void update(entt::registry& registry)
