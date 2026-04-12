@@ -12,15 +12,17 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          submodules: recursive
 
       - name: Cache packages
         uses: awalsh128/cache-apt-pkgs-action@latest
         with:
-          packages: cmake build-essential libglew-dev libglfw3-dev libglu1-mesa-dev libgtest-dev libglm-dev xvfb
+          packages: cmake build-essential libglfw3-dev libglu1-mesa-dev libgtest-dev xvfb
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y cmake build-essential libglew-dev libglfw3-dev libglu1-mesa-dev libgtest-dev libglm-dev
+          sudo apt-get install -y cmake build-essential libglfw3-dev libglu1-mesa-dev libgtest-dev
 
           cd /usr/src/gtest
           sudo cmake .
