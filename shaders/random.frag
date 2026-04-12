@@ -1,17 +1,13 @@
 #version 450 core
 
-float funk(float n) {
-    return fract(cos(n));
-}
+layout (location = 0) out vec4 fColor;
 
 vec3 randomColor(int id) {
-    float R = funk(float(id -1));
-    float G = funk(float(id));
-    float B = funk(float(id +1));
+    float R = cos(float(id));
+    float G = sin(float(id));
+    float B = tan(float(id));
     return vec3(R, G, B);
 }
-
-layout (location = 0) out vec4 fColor;
 
 void main() 
 {

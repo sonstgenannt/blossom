@@ -4,9 +4,6 @@ on:
   pull_request:
     branches:
       - main
-  push:
-    branches:
-      - local-dependencies
 
 jobs:
   build-and-test:
