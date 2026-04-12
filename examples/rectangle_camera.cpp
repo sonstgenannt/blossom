@@ -1,9 +1,9 @@
 #include "../headers/window.h"
 #include "../headers/shader.h"
 #include "../headers/systems/render.h"
-#include "../headers/systems/orthographic_camera.h"
+#include "../headers/systems/camera.h"
 #include "../headers/systems/transform.h"
-#include "../headers/factories/orthographic_camera.h"
+#include "../headers/factories/camera.h"
 #include "../headers/factories/rectangle.h"
 
 constexpr unsigned int WINDOW_WIDTH  = 1920;
@@ -32,14 +32,14 @@ auto main() -> int
       RECTANGLE_SCALE,
       default_shader.program_id);
 
-  blossom::factory::orthographic_camera{registry}
+  blossom::factory::camera{registry}
     .with_width    (WINDOW_WIDTH)
     .with_height   (WINDOW_HEIGHT)
     .with_position (CAMERA_POSITION)
     .make_active();
 
   blossom::system::transform::update(registry);
-  blossom::system::orthographic_camera::update(registry);
+  blossom::system::camera::update(registry);
 
   while ( glfwWindowShouldClose(window.window_ptr) == 0 )
   {

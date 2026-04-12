@@ -2,8 +2,8 @@
 #include "../headers/shader.h"
 #include "../headers/systems/render.h"
 #include "../headers/systems/transform.h"
-#include "../headers/systems/perspective_camera.h"
-#include "../headers/factories/perspective_camera.h"
+#include "../headers/systems/camera.h"
+#include "../headers/factories/camera.h"
 #include "../headers/factories/sphere.h"
 
 const int WINDOW_WIDTH = 800;
@@ -25,12 +25,13 @@ auto main() -> int
 
     constexpr float CAMERA_FOV_Y = 90.0F;
 
-    blossom::factory::perspective_camera{registry}
+    blossom::factory::camera{registry}
       .with_width (WINDOW_WIDTH)
       .with_height(WINDOW_HEIGHT)
       .with_fov_y (CAMERA_FOV_Y)
       .with_position(CAMERA_POSITION)
       .with_rotation(CAMERA_ROTATION)
+      .with_type(blossom::component::camera::camera_type::PERSPECTIVE)
       .make_active();
 
     blossom::shader default_shader("shaders/random.frag", "shaders/default.vert");
@@ -43,7 +44,7 @@ auto main() -> int
           default_shader.program_id);
 
     blossom::system::transform::update(registry);
-    blossom::system::perspective_camera::update(registry);
+    blossom::system::camera::update(registry);
 
     while (glfwWindowShouldClose(window.window_ptr) == 0) 
     {
