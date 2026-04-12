@@ -6,8 +6,8 @@
 #include "../headers/factories/perspective_camera.h"
 #include "../headers/factories/sphere.h"
 
-const int WINDOW_WIDTH = 1000;
-const int WINDOW_HEIGHT = 1000;
+const int WINDOW_WIDTH = 800;
+const int WINDOW_HEIGHT = 800;
 const char* window_title = "Blossom Mesh View Example";
 
 auto main() -> int
@@ -33,7 +33,7 @@ auto main() -> int
       .with_rotation(CAMERA_ROTATION)
       .make_active();
 
-    blossom::shader default_shader("shaders/default.frag", "shaders/default.vert");
+    blossom::shader default_shader("shaders/random.frag", "shaders/default.vert");
 
     blossom::factory::sphere(
           registry,
