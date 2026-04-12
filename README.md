@@ -13,9 +13,14 @@ https://github.com/user-attachments/assets/d5b73877-5381-43ae-8963-58169aaaf4ad
 
 ## Prerequisites 
 
-To use **blossom**, you'll first need to install the following prerequisites:
+To use **blossom**, you'll first need to install [GLFW](https://github.com/glfw/glfw) (which handles windowing).
 
-- [GLFW](https://github.com/glfw/glfw)
+> [!IMPORTANT]
+Ensure that you clone recursively to pull the submodules via the following command:
+
+```sh
+git clone --recursive https://github.com/gjoacorp/blossom.git
+```
 
 ## Building the examples
 
