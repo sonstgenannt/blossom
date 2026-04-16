@@ -13,12 +13,12 @@ namespace blossom
       const char* frag_path_;
       const char* vert_path_;
 
+      static void print_log_(GLuint shader);
+
       void init_();
 
     public:
       static auto read_source(const char* path) -> std::string;
-
-      static void print_log(GLuint shader);
 
       GLuint program_id;
 

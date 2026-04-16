@@ -30,12 +30,11 @@ auto shader::read_source(const char* path) -> std::string
   {
     throw std::runtime_error("The file" + std::string(path) + "doesn't exist.");
   }
-
   file.close();
   return file_content;
 }
 
-void shader::print_log(GLuint shader)
+void shader::print_log_(GLuint shader)
 {
   if ( glfwGetCurrentContext() == nullptr )
   {
@@ -88,7 +87,7 @@ void shader::init_()
   if ( vertex_shader_compilation_status == GL_FALSE ) 
   {
     std::cout << "ERROR: Vertex shader compilation failed." << "\n";
-    print_log(VERTEX_SHADER);
+    print_log_(VERTEX_SHADER);
   }
 
   glShaderSource(FRAGMENT_SHADER, 1, &fragment_shader_source, nullptr);
@@ -100,7 +99,7 @@ void shader::init_()
   if ( fragment_shader_compilation_status == GL_FALSE ) 
   {
     std::cout << "ERROR: Fragment shader compilation failed." << "\n";
-    print_log(FRAGMENT_SHADER);
+    print_log_(FRAGMENT_SHADER);
   }
 
   GLuint shader_program = glCreateProgram();
