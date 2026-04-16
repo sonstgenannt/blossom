@@ -34,11 +34,6 @@ void shader::print_log_(GLuint shader)
     throw std::runtime_error("ERROR: Cannot print shader log. There is no current OpenGL context.");
   }
 
-  if ( glIsShader(shader) == GL_FALSE )
-  {
-    throw std::invalid_argument("ERROR: Unable to print the shader log of an invalid shader object.");
-  }
-
   GLsizei max_length = 0;
 
   glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &max_length);
@@ -74,8 +69,8 @@ auto shader::compile(const shader_info& info) -> GLuint
 
   if ( vertex_shader_compilation_status == GL_FALSE ) 
   {
-    std::cout << "WARNING: Vertex shader compilation failed." << "\n";
     print_log_(VERTEX_SHADER);
+    throw std::runtime_error("ERROR: Vertex shader compilation failed!");
   }
 
   glShaderSource(FRAGMENT_SHADER, 1, &fssc_ptr, nullptr);
@@ -86,8 +81,8 @@ auto shader::compile(const shader_info& info) -> GLuint
 
   if ( fragment_shader_compilation_status == GL_FALSE ) 
   {
-    std::cout << "WARNING: Fragment shader compilation failed." << "\n";
     print_log_(FRAGMENT_SHADER);
+    throw std::runtime_error("ERROR: Fragment shader compilation failed!");
   }
 
   GLuint shader_program = glCreateProgram();
