@@ -12,7 +12,6 @@ shader::shader(const char* frag_path, const char* vert_path) :
   frag_path_(frag_path), 
   vert_path_(vert_path) 
 {
-  init_();
 }
 
 auto shader::read_source(const char* path) -> std::string
@@ -62,15 +61,15 @@ void shader::print_log_(GLuint shader)
   }
 }
 
-void shader::init_() 
+auto shader::compile(const std::string& frag_path, const std::string& vertex_path) -> GLuint
 {
   if ( glfwGetCurrentContext() == nullptr )
   {
     throw std::runtime_error("ERROR: Cannot initialise shader (there is no current OpenGL context.) Ensure that a GL context is active before shader initialisation.");
   }
 
-  std::string vertex_shader_source_string = read_source(vert_path_);
-  std::string fragment_shader_source_string = read_source(frag_path_);
+  std::string vertex_shader_source_string = read_source(vertex_path.c_str());
+  std::string fragment_shader_source_string = read_source(frag_path.c_str());
 
   const char* vertex_shader_source = vertex_shader_source_string.c_str();
   const char* fragment_shader_source = fragment_shader_source_string.c_str();
@@ -111,5 +110,6 @@ void shader::init_()
   glDeleteShader(VERTEX_SHADER);
   glDeleteShader(FRAGMENT_SHADER);
 
-  program_id = shader_program;
+  return shader_program;
+
 }
