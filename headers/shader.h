@@ -7,6 +7,12 @@
 
 namespace blossom 
 {
+  struct shader_info
+  {
+    std::string vertex_shader_path;
+    std::string fragment_shader_path;
+  };
+
   class shader 
   {
     private:
@@ -14,7 +20,7 @@ namespace blossom
 
     public:
       static auto read_source(const char* path) -> std::string;
-      static auto compile(const std::string& frag_path, const std::string& vert_path) -> GLuint;
+      static auto compile(const shader_info& info) -> GLuint;
   };
 }
 
