@@ -79,7 +79,7 @@ auto shader::compile(const std::string& frag_path, const std::string& vertex_pat
 
   if ( vertex_shader_compilation_status == GL_FALSE ) 
   {
-    std::cout << "ERROR: Vertex shader compilation failed." << "\n";
+    std::cout << "WARNING: Vertex shader compilation failed." << "\n";
     print_log_(VERTEX_SHADER);
   }
 
@@ -91,7 +91,7 @@ auto shader::compile(const std::string& frag_path, const std::string& vertex_pat
 
   if ( fragment_shader_compilation_status == GL_FALSE ) 
   {
-    std::cout << "ERROR: Fragment shader compilation failed." << "\n";
+    std::cout << "WARNING: Fragment shader compilation failed." << "\n";
     print_log_(FRAGMENT_SHADER);
   }
 
