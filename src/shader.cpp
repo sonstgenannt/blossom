@@ -36,7 +36,7 @@ void shader::print_log_(GLuint shader)
 
   if ( glIsShader(shader) == GL_FALSE )
   {
-    throw std::runtime_error("ERROR: Unable to print the shader log of an invalid shader object.");
+    throw std::invalid_argument("ERROR: Unable to print the shader log of an invalid shader object.");
   }
 
   GLsizei max_length = 0;
