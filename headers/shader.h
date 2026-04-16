@@ -10,21 +10,11 @@ namespace blossom
   class shader 
   {
     private:
-      const char* frag_path_;
-      const char* vert_path_;
-
       static void print_log_(GLuint shader);
-
 
     public:
       static auto read_source(const char* path) -> std::string;
       static auto compile(const std::string& frag_path, const std::string& vert_path) -> GLuint;
-
-      GLuint program_id;
-
-      shader(const char* frag_path, const char* vert_path);
-
-      shader() = default;
   };
 }
 

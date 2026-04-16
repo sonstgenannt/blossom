@@ -8,12 +8,6 @@
 
 using blossom::shader;
 
-shader::shader(const char* frag_path, const char* vert_path) : 
-  frag_path_(frag_path), 
-  vert_path_(vert_path) 
-{
-}
-
 auto shader::read_source(const char* path) -> std::string
 {
   std::string file_content;
@@ -111,5 +105,4 @@ auto shader::compile(const std::string& frag_path, const std::string& vertex_pat
   glDeleteShader(FRAGMENT_SHADER);
 
   return shader_program;
-
 }
