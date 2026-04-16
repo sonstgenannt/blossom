@@ -57,11 +57,6 @@ void shader::print_log_(GLuint shader)
 
 auto shader::compile(const shader_info& info) -> GLuint
 {
-  if ( glfwGetCurrentContext() == nullptr )
-  {
-    throw std::runtime_error("ERROR: Cannot initialise shader (there is no current OpenGL context.) Ensure that a GL context is active before shader initialisation.");
-  }
-
   std::string vertex_shader_source_code   = read_source(info.vertex_shader_path);
   std::string fragment_shader_source_code = read_source(info.fragment_shader_path);
 
