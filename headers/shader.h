@@ -19,7 +19,7 @@ namespace blossom
       static void print_log_(GLuint shader);
 
     public:
-      static auto read_source(const char* path) -> std::string;
+      static auto read_source(const std::string& path) -> std::string;
       static auto compile(const shader_info& info) -> GLuint;
   };
 }

@@ -8,7 +8,7 @@
 
 using blossom::shader;
 
-auto shader::read_source(const char* path) -> std::string
+auto shader::read_source(const std::string& path) -> std::string
 {
   std::string file_content;
   std::ifstream file(path, std::ios::in);
@@ -21,7 +21,7 @@ auto shader::read_source(const char* path) -> std::string
 
   if ( !file.is_open() ) 
   {
-    throw std::runtime_error("The file" + std::string(path) + "doesn't exist.");
+    throw std::runtime_error("ERROR: The file " + path + " doesn't exist.");
   }
   file.close();
   return file_content;
@@ -62,14 +62,16 @@ auto shader::compile(const shader_info& info) -> GLuint
     throw std::runtime_error("ERROR: Cannot initialise shader (there is no current OpenGL context.) Ensure that a GL context is active before shader initialisation.");
   }
 
-  // TODO: simplify
-  const char* vertex_shader_source_code   = read_source(info.vertex_shader_path.c_str()).c_str();
-  const char* fragment_shader_source_code = read_source(info.fragment_shader_path.c_str()).c_str();
+  std::string vertex_shader_source_code   = read_source(info.vertex_shader_path);
+  std::string fragment_shader_source_code = read_source(info.fragment_shader_path);
 
-  const GLuint VERTEX_SHADER = glCreateShader(GL_VERTEX_SHADER);
+  const char* vssc_ptr =   vertex_shader_source_code.c_str();
+  const char* fssc_ptr = fragment_shader_source_code.c_str();
+
+  const GLuint VERTEX_SHADER   = glCreateShader(GL_VERTEX_SHADER);
   const GLuint FRAGMENT_SHADER = glCreateShader(GL_FRAGMENT_SHADER);
 
-  glShaderSource(VERTEX_SHADER, 1, &vertex_shader_source_code, nullptr);
+  glShaderSource(VERTEX_SHADER, 1, &vssc_ptr, nullptr);
   glCompileShader(VERTEX_SHADER);
   
   GLint vertex_shader_compilation_status;
@@ -81,7 +83,7 @@ auto shader::compile(const shader_info& info) -> GLuint
     print_log_(VERTEX_SHADER);
   }
 
-  glShaderSource(FRAGMENT_SHADER, 1, &fragment_shader_source_code, nullptr);
+  glShaderSource(FRAGMENT_SHADER, 1, &fssc_ptr, nullptr);
   glCompileShader(FRAGMENT_SHADER);
 
   GLint fragment_shader_compilation_status;
