@@ -19,11 +19,27 @@ namespace blossom
     enum class shader_type : uint8_t
     {
       VERTEX,
-      FRAGMENT
+      FRAGMENT,
+      GEOMETRY
     };
 
     private:
       static void print_log_(GLuint shader);
+
+      static auto get_gl_shader_type_(shader_type type) -> GLenum
+      {
+        switch(type)
+        {
+          case (shader_type::VERTEX):
+            return GL_VERTEX_SHADER;
+
+          case(shader_type::GEOMETRY):
+            return GL_GEOMETRY_SHADER;
+
+          case(shader_type::FRAGMENT):
+            return GL_FRAGMENT_SHADER;
+        }
+      }
 
       template<shader_type ST>
       static auto compile_shader_(const std::string& shader_source) -> GLuint
@@ -33,39 +49,20 @@ namespace blossom
         GLuint shader = 0;
         GLint shader_compilation_status = 0;
 
-        if constexpr (ST == shader_type::VERTEX)
+        const GLenum SHADER_GL_TYPE = get_gl_shader_type_(ST);
+
+        shader = glCreateShader(SHADER_GL_TYPE);
+        glShaderSource(shader, 1, &ss_ptr, nullptr);
+        glCompileShader(shader);
+
+        glGetShaderiv(shader, GL_COMPILE_STATUS, &shader_compilation_status);
+
+        if ( shader_compilation_status == GL_FALSE ) 
         {
-          shader = glCreateShader(GL_VERTEX_SHADER);
-          glShaderSource(shader, 1, &ss_ptr, nullptr);
-          glCompileShader(shader);
-
-          GLint shader_compilation_status = 0;
-          glGetShaderiv(shader, GL_COMPILE_STATUS, &shader_compilation_status);
-
-          if ( shader_compilation_status == GL_FALSE ) 
-          {
-            print_log_(shader);
-            throw std::runtime_error("ERROR (blossom::shader): Vertex shader compilation failed!");
-          }
-          return shader;
+          print_log_(shader);
+          throw std::runtime_error("ERROR (blossom::shader): Vertex shader compilation failed!");
         }
-
-        if constexpr (ST == shader_type::FRAGMENT)
-        {
-          shader = glCreateShader(GL_FRAGMENT_SHADER);
-          glShaderSource(shader, 1, &ss_ptr, nullptr);
-          glCompileShader(shader);
-
-          GLint shader_compilation_status = 0;
-          glGetShaderiv(shader, GL_COMPILE_STATUS, &shader_compilation_status);
-
-          if ( shader_compilation_status == GL_FALSE ) 
-          {
-            print_log_(shader);
-            throw std::runtime_error("ERROR (blossom::shader): Fragment shader compilation failed!");
-          }
-          return shader;
-        }
+        return shader;
       }
 
     public:
