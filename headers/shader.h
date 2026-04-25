@@ -45,7 +45,7 @@ namespace blossom
           if ( shader_compilation_status == GL_FALSE ) 
           {
             print_log_(shader);
-            throw std::runtime_error("ERROR: Vertex shader compilation failed!");
+            throw std::runtime_error("ERROR (blossom::shader): Vertex shader compilation failed!");
           }
           return shader;
         }
@@ -62,7 +62,7 @@ namespace blossom
           if ( shader_compilation_status == GL_FALSE ) 
           {
             print_log_(shader);
-            throw std::runtime_error("ERROR: Vertex shader compilation failed!");
+            throw std::runtime_error("ERROR (blossom::shader): Fragment shader compilation failed!");
           }
           return shader;
         }
