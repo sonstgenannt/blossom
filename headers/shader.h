@@ -11,6 +11,7 @@ namespace blossom
   struct shader_info
   {
     std::string vertex_shader_path;
+    std::string geometry_shader_path;
     std::string fragment_shader_path;
   };
 
@@ -42,7 +43,7 @@ namespace blossom
       }
 
       template<shader_type ST>
-      static auto compile_shader_(const std::string& shader_source) -> GLuint
+      static void compile_shader_(const std::string& shader_source, GLuint program)
       {
         const char* ss_ptr = shader_source.c_str();
 
@@ -62,7 +63,9 @@ namespace blossom
           print_log_(shader);
           throw std::runtime_error("ERROR (blossom::shader): Vertex shader compilation failed!");
         }
-        return shader;
+
+        glAttachShader(program, shader);
+        glDeleteProgram(shader);
       }
 
     public:

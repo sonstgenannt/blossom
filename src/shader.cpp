@@ -51,20 +51,24 @@ void shader::print_log_(GLuint shader)
 
 auto shader::compile(const shader_info& info) -> GLuint
 {
-  std::string vertex_shader_source_code   = read_source(info.vertex_shader_path);
-  std::string fragment_shader_source_code = read_source(info.fragment_shader_path);
-
-  GLuint vertex_shader   = compile_shader_<shader_type::VERTEX>(vertex_shader_source_code);
-  GLuint fragment_shader = compile_shader_<shader_type::FRAGMENT>(fragment_shader_source_code);
-
   GLuint shader_program = glCreateProgram();
 
-  glAttachShader(shader_program, vertex_shader);
-  glAttachShader(shader_program, fragment_shader);
-  glLinkProgram(shader_program);
+  std::string vertex_shader_source_code   = read_source(info.vertex_shader_path);
+  std::string geometry_shader_source_code;
+  std::string fragment_shader_source_code = read_source(info.fragment_shader_path);
 
-  glDeleteShader(vertex_shader);
-  glDeleteShader(fragment_shader);
+  const bool SHOULD_COMPILE_GEOMETRY_SHADER = !info.geometry_shader_path.empty();
+
+  if (SHOULD_COMPILE_GEOMETRY_SHADER)
+  {
+    geometry_shader_source_code = read_source(info.geometry_shader_path);
+    compile_shader_<shader_type::GEOMETRY>(geometry_shader_source_code, shader_program);
+  }
+
+  compile_shader_<shader_type::VERTEX>(vertex_shader_source_code, shader_program);
+  compile_shader_<shader_type::FRAGMENT>(fragment_shader_source_code, shader_program);
+
+  glLinkProgram(shader_program);
 
   return shader_program;
 }
