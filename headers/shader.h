@@ -65,7 +65,7 @@ namespace blossom
         }
 
         glAttachShader(program, shader);
-        glDeleteProgram(shader);
+        glDeleteShader(shader);
       }
 
     public:
