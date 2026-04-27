@@ -59,13 +59,14 @@ auto shader::compile(const shader_info& info) -> GLuint
 
   const bool SHOULD_COMPILE_GEOMETRY_SHADER = !info.geometry_shader_path.empty();
 
+  compile_shader_<shader_type::VERTEX>(vertex_shader_source_code, shader_program);
+
   if (SHOULD_COMPILE_GEOMETRY_SHADER)
   {
     geometry_shader_source_code = read_source(info.geometry_shader_path);
     compile_shader_<shader_type::GEOMETRY>(geometry_shader_source_code, shader_program);
   }
 
-  compile_shader_<shader_type::VERTEX>(vertex_shader_source_code, shader_program);
   compile_shader_<shader_type::FRAGMENT>(fragment_shader_source_code, shader_program);
 
   glLinkProgram(shader_program);
