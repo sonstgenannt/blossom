@@ -26,6 +26,7 @@ namespace blossom
 
     private:
       static void print_log_(GLuint shader);
+      static void print_program_log_(GLuint shader_program);
 
       static auto get_gl_shader_type_(shader_type type) -> GLenum
       {

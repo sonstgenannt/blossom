@@ -49,6 +49,29 @@ void shader::print_log_(GLuint shader)
   }
 }
 
+void shader::print_program_log_(GLuint shader_program)
+{
+  if ( glfwGetCurrentContext() == nullptr )
+  {
+    throw std::runtime_error("ERROR: Cannot print program log. There is no current OpenGL context.");
+  }
+
+  GLsizei max_length = 0;
+
+  glGetProgramiv(shader_program, GL_INFO_LOG_LENGTH, &max_length);
+
+  if ( max_length > 0 ) 
+  {
+    std::vector<GLchar> info_log(max_length);
+    GLsizei length = 0;
+
+    glGetProgramInfoLog(shader_program, max_length, &length, info_log.data());
+
+    const std::string INFO_LOG_STR(info_log.begin(), info_log.begin() + length);
+    std::cout << "Program Log: " << INFO_LOG_STR << "\n";
+  }
+}
+
 auto shader::compile(const shader_info& info) -> GLuint
 {
   GLuint shader_program = glCreateProgram();
@@ -70,6 +93,7 @@ auto shader::compile(const shader_info& info) -> GLuint
   compile_shader_<shader_type::FRAGMENT>(fragment_shader_source_code, shader_program);
 
   glLinkProgram(shader_program);
+  print_program_log_(shader_program);
 
   return shader_program;
 }
