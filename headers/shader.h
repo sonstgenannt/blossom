@@ -1,6 +1,7 @@
 #ifndef BLOSSOM_SHADER_H
 #define BLOSSOM_SHADER_H
 
+#include <iostream>
 #include <stdexcept>
 #include <string>
 #include <glad/gl.h>
@@ -21,7 +22,7 @@ namespace blossom
     {
       VERTEX,
       FRAGMENT,
-      GEOMETRY
+      GEOMETRY,
     };
 
     private:
@@ -40,6 +41,9 @@ namespace blossom
 
           case(shader_type::FRAGMENT):
             return GL_FRAGMENT_SHADER;
+          default:
+            std::cout << "WARNING (blossom::shader): Unknown shader type passed to shader::get_gl_shader_type_(). Returning 0.\n";
+            return 0;
         }
       }
 
@@ -53,6 +57,8 @@ namespace blossom
             return "Geometry";
           case (shader_type::FRAGMENT):
             return "Fragment";
+          default:
+            return "Unknown";
         }
       }
 
