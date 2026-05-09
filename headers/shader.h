@@ -43,6 +43,19 @@ namespace blossom
         }
       }
 
+      static auto get_name_from_type_(shader_type type) -> std::string
+      {
+        switch(type)
+        {
+          case (shader_type::VERTEX):
+            return "Vertex";
+          case (shader_type::GEOMETRY):
+            return "Geometry";
+          case (shader_type::FRAGMENT):
+            return "Fragment";
+        }
+      }
+
       template<shader_type ST>
       static void compile_shader_(const std::string& shader_source, GLuint program)
       {
@@ -62,7 +75,8 @@ namespace blossom
         if ( shader_compilation_status == GL_FALSE ) 
         {
           print_log_(shader);
-          throw std::runtime_error("ERROR (blossom::shader): Vertex shader compilation failed!");
+          const std::string SHADER_NAME = get_name_from_type_(ST);
+          throw std::runtime_error("ERROR (blossom::shader): " + SHADER_NAME + " shader compilation failed!");
         }
 
         glAttachShader(program, shader);
