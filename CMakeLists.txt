@@ -41,7 +41,7 @@ add_example(rectangle_camera)
 add_example(triangle)
 add_example(view)
 add_example(lines)
-add_example(geometry)
+add_example(squiggle)
 
 find_package(GTest REQUIRED)
 set(TEST_SOURCES
