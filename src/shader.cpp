@@ -49,22 +49,51 @@ void shader::print_log_(GLuint shader)
   }
 }
 
+void shader::print_program_log_(GLuint shader_program)
+{
+  if ( glfwGetCurrentContext() == nullptr )
+  {
+    throw std::runtime_error("ERROR: Cannot print program log. There is no current OpenGL context.");
+  }
+
+  GLsizei max_length = 0;
+
+  glGetProgramiv(shader_program, GL_INFO_LOG_LENGTH, &max_length);
+
+  if ( max_length > 0 ) 
+  {
+    std::vector<GLchar> info_log(max_length);
+    GLsizei length = 0;
+
+    glGetProgramInfoLog(shader_program, max_length, &length, info_log.data());
+
+    const std::string INFO_LOG_STR(info_log.begin(), info_log.begin() + length);
+    std::cout << "Program Log: " << INFO_LOG_STR << "\n";
+  }
+}
+
 auto shader::compile(const shader_info& info) -> GLuint
 {
-  std::string vertex_shader_source_code   = read_source(info.vertex_shader_path);
-  std::string fragment_shader_source_code = read_source(info.fragment_shader_path);
-
-  GLuint vertex_shader   = compile_shader_<shader_type::VERTEX>(vertex_shader_source_code);
-  GLuint fragment_shader = compile_shader_<shader_type::FRAGMENT>(fragment_shader_source_code);
-
   GLuint shader_program = glCreateProgram();
 
-  glAttachShader(shader_program, vertex_shader);
-  glAttachShader(shader_program, fragment_shader);
-  glLinkProgram(shader_program);
+  std::string vertex_shader_source_code   = read_source(info.vertex_shader_path);
+  std::string geometry_shader_source_code;
+  std::string fragment_shader_source_code = read_source(info.fragment_shader_path);
 
-  glDeleteShader(vertex_shader);
-  glDeleteShader(fragment_shader);
+  const bool SHOULD_COMPILE_GEOMETRY_SHADER = !info.geometry_shader_path.empty();
+
+  compile_shader_<shader_type::VERTEX>(vertex_shader_source_code, shader_program);
+
+  if (SHOULD_COMPILE_GEOMETRY_SHADER)
+  {
+    geometry_shader_source_code = read_source(info.geometry_shader_path);
+    compile_shader_<shader_type::GEOMETRY>(geometry_shader_source_code, shader_program);
+  }
+
+  compile_shader_<shader_type::FRAGMENT>(fragment_shader_source_code, shader_program);
+
+  glLinkProgram(shader_program);
+  print_program_log_(shader_program);
 
   return shader_program;
 }
