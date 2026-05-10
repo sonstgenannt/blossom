@@ -74,6 +74,11 @@ void shader::print_program_log_(GLuint shader_program)
 
 auto shader::compile(const shader_info& info) -> GLuint
 {
+  if (glfwGetCurrentContext() == nullptr)
+  {
+    throw std::runtime_error("ERROR (blossom::shader): Cannot compile shaders. There is no current OpenGL context.");
+  }
+
   GLuint shader_program = glCreateProgram();
 
   std::string vertex_shader_source_code   = read_source(info.vertex_shader_path);
