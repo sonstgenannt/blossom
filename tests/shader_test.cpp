@@ -28,7 +28,7 @@ TEST_F(shader_test, compile_with_invalid_vertex_shader_throws_runtime_error)
   create_dummy_window_();
   const blossom::shader_info INFO
   {
-    .vertex_shader_path = "shaders/default.frag",
+    .vertex_shader_path   = "shaders/squiggle.geom", 
     .fragment_shader_path = "shaders/default.frag"
   };
   EXPECT_THROW(blossom::shader::compile(INFO), std::runtime_error);
@@ -39,7 +39,7 @@ TEST_F(shader_test, compile_with_invalid_fragment_shader_throws_runtime_error)
   create_dummy_window_();
   const blossom::shader_info INFO
   {
-    .vertex_shader_path = "shaders/default.vert",
+    .vertex_shader_path   = "shaders/default.vert",
     .fragment_shader_path = "shaders/default.vert"
   };
   EXPECT_THROW(blossom::shader::compile(INFO), std::runtime_error);
