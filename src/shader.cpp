@@ -97,8 +97,15 @@ auto shader::compile(const shader_info& info) -> GLuint
 
   compile_shader_<shader_type::FRAGMENT>(fragment_shader_source_code, shader_program);
 
+  GLint successfully_linked = 0;
   glLinkProgram(shader_program);
-  print_program_log_(shader_program);
+  glGetProgramiv(shader_program, GL_LINK_STATUS, &successfully_linked);
+
+  if (successfully_linked == 0)
+  {
+    print_program_log_(shader_program);
+    throw std::runtime_error("ERROR (blossom::shader): Shader program linking failed!");
+  }
 
   return shader_program;
 }
