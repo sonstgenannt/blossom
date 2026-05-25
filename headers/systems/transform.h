@@ -14,14 +14,14 @@ namespace blossom::system
       static void update(entt::registry& registry)
       {
         auto view = registry.view<component::transform, component::matrix::transform>();
-        for ( auto [entity, transform, transform_matrix] : view.each() )
+        for ( auto [entity, transform, matrix_transform] : view.each() )
         {
-          update_transform_matrix_(transform, transform_matrix);
+          update_transform_matrix_(transform, matrix_transform);
         }
       }
 
     private:
-      static void update_transform_matrix_(const component::transform& transform, component::matrix::transform& transform_matrix)
+      static void update_transform_matrix_(const component::transform& transform, component::matrix::transform& matrix_transform)
       {
         auto local_to_world = glm::mat4(1.0F);
 
@@ -31,7 +31,7 @@ namespace blossom::system
         local_to_world = glm::rotate(local_to_world, glm::radians(transform.rotation.z), glm::vec3(0.0F, 0.0F, 1.0F));
         local_to_world = glm::scale(local_to_world, transform.scale);
 
-        transform_matrix.data = local_to_world;
+        matrix_transform.data = local_to_world;
       }
   };
 }
