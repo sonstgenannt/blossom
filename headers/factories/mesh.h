@@ -93,7 +93,7 @@ namespace blossom::factory
       void init_uniform_locations_()
       {
         auto& mesh = registry_.get<component::mesh>(entity_);
-        mesh.mvp_uniform_location = glGetUniformLocation(mesh.shader_program, "mvp_matrix");
+        mesh.uniform_location_mvp = glGetUniformLocation(mesh.shader_program, "mvp_matrix");
       }
 
       void init_buffers_()
