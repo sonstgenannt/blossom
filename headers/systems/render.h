@@ -1,13 +1,16 @@
 #ifndef BLOSSOM_SYSTEM_RENDER_H
 #define BLOSSOM_SYSTEM_RENDER_H
 
+#include <iostream>
+
+#include "../components/tags/active_camera.h"
+#include "../components/matrices/transform.h"
+#include "../components/matrices/view.h"
+#include "../components/matrices/projection.h"
+#include "../components/mesh.h"
+
 #include <entt/entt.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include <iostream>
-#include "../components/tags/active_camera.h"
-#include "../components/view_projection_matrix.h"
-#include "../components/matrices/transform.h"
-#include "../components/mesh.h"
 
 namespace blossom::system
 {
@@ -25,13 +28,22 @@ namespace blossom::system
         {
           auto active_camera_entity = active_camera_view.front();
 
-          if (auto* vp_matrix = registry.try_get<component::view_projection_matrix>(active_camera_entity))
+          if (auto* matrix_projection = registry.try_get<component::matrix::projection>(active_camera_entity))
           {
-            view_projection_matrix = vp_matrix->matrix;
+            view_projection_matrix = matrix_projection->data;
+
+            if (auto* matrix_view = registry.try_get<component::matrix::view>(active_camera_entity))
+            {
+              view_projection_matrix *= matrix_view->data;
+            }
+            else
+            {
+              std::cout << "WARNING (blossom::system::render): Active camera doesn't have component::matrix::projection." << "\n";
+            }
           }
           else
           {
-            std::cout << "WARNING (blossom::system::render): Active camera doesn't have component::view_projection_matrix." << "\n";
+            std::cout << "WARNING (blossom::system::render): Active camera doesn't have component::matrix::view." << "\n";
           }
         }
         else

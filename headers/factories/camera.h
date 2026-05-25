@@ -4,8 +4,9 @@
 #include <entt/entt.hpp>
 #include "../components/transform.h"
 #include "../components/matrices/transform.h"
+#include "../components/matrices/view.h"
+#include "../components/matrices/projection.h"
 #include "../components/camera.h"
-#include "../components/view_projection_matrix.h"
 #include "../components/tags/active_camera.h"
 
 namespace blossom::factory
@@ -20,7 +21,8 @@ namespace blossom::factory
         registry_.emplace<component::camera>(entity_);
         registry_.emplace<component::transform>(entity_);
         registry_.emplace<component::matrix::transform>(entity_);
-        registry_.emplace<component::view_projection_matrix>(entity_);
+        registry_.emplace<component::matrix::view>(entity_);
+        registry_.emplace<component::matrix::projection>(entity_);
       }
 
       auto with_width(const uint16_t width) -> camera&
