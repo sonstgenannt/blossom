@@ -8,8 +8,16 @@ layout (std140, binding = 0) uniform CameraMatrices {
 uniform mat4 model;
 
 layout (location = 0) in vec4 vPosition;
+layout (location = 1) in vec4 vNormal;
+layout (location = 2) in vec2 vTexCoord;
+
+out vec4 Normal;
+out vec2 TexCoord;
 
 void main()
 {
   gl_Position = projection * view * model * vPosition;
+
+  Normal = vNormal;
+  TexCoord = vTexCoord;
 }
