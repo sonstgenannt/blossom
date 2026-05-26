@@ -23,6 +23,18 @@ namespace blossom::factory
         registry_.emplace<component::matrix::transform>(entity_);
         registry_.emplace<component::matrix::view>(entity_);
         registry_.emplace<component::matrix::projection>(entity_);
+
+        init_buffers();
+      }
+
+      void init_buffers()
+      {
+        auto& ubo = registry_.get<component::camera>(entity_).ubo;
+        glCreateBuffers(1, &ubo);
+
+        glNamedBufferData(ubo, 2 * sizeof(glm::mat4), NULL, GL_DYNAMIC_DRAW);
+
+        glBindBufferBase(GL_UNIFORM_BUFFER, 0, ubo);
       }
 
       auto with_width(const uint16_t width) -> camera&

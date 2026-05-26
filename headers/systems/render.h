@@ -8,6 +8,7 @@
 #include "../components/matrices/view.h"
 #include "../components/matrices/projection.h"
 #include "../components/mesh.h"
+#include "../components/camera.h"
 
 #include <entt/entt.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -45,6 +46,10 @@ namespace blossom::system
           {
             std::cout << "WARNING (blossom::system::render): Active camera doesn't have component::matrix::projection." << "\n";
           }
+
+          GLuint ubo = (registry.try_get<component::camera>(active_camera_entity))->ubo;
+          glNamedBufferSubData(ubo, 0, sizeof(glm::mat4), glm::value_ptr(mvp_matrices[0]));
+          glNamedBufferSubData(ubo, sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(mvp_matrices[1]));
         }
         else
         {
@@ -64,22 +69,10 @@ namespace blossom::system
       {
         glUseProgram(mesh.shader_program);
         glUniformMatrix4fv(
-            mesh.uniform_location_projection, 
+            mesh.uniform_location_model, 
             1, 
             GL_FALSE, 
-            glm::value_ptr(mvp_matrix[0])
-        ); 
-        glUniformMatrix4fv(
-          mesh.uniform_location_view,
-          1,
-          GL_FALSE,
-          glm::value_ptr(mvp_matrix[1])
-        );
-        glUniformMatrix4fv(
-          mesh.uniform_location_model,
-          1,
-          GL_FALSE,
-          glm::value_ptr(mvp_matrix[2])
+            glm::value_ptr(mvp_matrix[2])
         );
 
         glBindVertexArray(mesh.vao);

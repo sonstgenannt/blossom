@@ -1,7 +1,10 @@
 #version 450 core
 
-uniform mat4 projection;
-uniform mat4 view;
+layout (std140, binding = 0) uniform CameraMatrices {
+    mat4 projection; 
+    mat4 view;       
+}; 
+
 uniform mat4 model;
 
 layout (location = 0) in vec4 vPosition;
