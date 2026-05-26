@@ -34,7 +34,19 @@ namespace blossom::factory
 
       auto with_vertices(std::vector<glm::vec3> vertices) -> mesh&
       {
-        vertices_ = std::move(vertices);
+        points_ = std::move(vertices);
+        return *this;
+      }
+
+      auto with_uv(std::vector<glm::vec2> uv) -> mesh&
+      {
+        uv_ = std::move(uv);
+        return *this;
+      }
+
+      auto with_normals(std::vector<glm::vec3> normals) -> mesh&
+      {
+        normals_ = std::move(normals);
         return *this;
       }
 
@@ -74,6 +86,28 @@ namespace blossom::factory
       {
         auto& mesh = registry_.get<component::mesh>(entity_);
 
+        if (uv_.empty())
+        {
+          uv_.assign(points_.size(), glm::vec2());
+        }
+
+        if (normals_.empty())
+        {
+          normals_ = points_;
+        }
+
+        for (size_t i = 0; i < points_.size(); i++)
+        {
+          vertices_.push_back(points_[i].x);
+          vertices_.push_back(points_[i].y);
+          vertices_.push_back(points_[i].z);
+          vertices_.push_back(normals_.at(i).x);
+          vertices_.push_back(normals_.at(i).y);
+          vertices_.push_back(normals_.at(i).z);
+          vertices_.push_back(uv_.at(i).x);
+          vertices_.push_back(uv_.at(i).y);
+        }
+
         mesh.vertex_count = static_cast<GLsizei>(vertices_.size());
         mesh.index_count = static_cast<GLsizei>(indices_.size());
 
@@ -87,7 +121,11 @@ namespace blossom::factory
       entt::registry&        registry_;
       entt::entity           entity_;
 
-      std::vector<glm::vec3> vertices_;
+      std::vector<glm::vec3> points_;
+      std::vector<glm::vec2> uv_;
+      std::vector<glm::vec3> normals_;
+
+      std::vector<float> vertices_;
       std::vector<GLuint> indices_;
 
       void init_uniform_locations_()
@@ -105,7 +143,7 @@ namespace blossom::factory
         glCreateBuffers(1, &mesh.vbo);
         glNamedBufferStorage(
             mesh.vbo, 
-            static_cast<GLsizeiptr>( vertices_.size() * sizeof(glm::vec3) ), 
+            static_cast<GLsizeiptr>( vertices_.size() * sizeof(float) ), 
             vertices_.data(), 
             0
         );
@@ -122,7 +160,7 @@ namespace blossom::factory
         }
 
         // Vertex size
-        const GLsizei stride = sizeof(glm::vec3);
+        const GLsizei stride = sizeof(glm::vec3) + sizeof(glm::vec3) + sizeof(glm::vec2);
 
         glVertexArrayElementBuffer(mesh.vao, mesh.ebo);
         glVertexArrayVertexBuffer(mesh.vao, 0, mesh.vbo, 0, stride);
@@ -137,6 +175,28 @@ namespace blossom::factory
           0
         );
         glVertexArrayAttribBinding(mesh.vao, 0, 0);
+
+        glEnableVertexArrayAttrib(mesh.vao, 1);
+        glVertexArrayAttribFormat(
+          mesh.vao,
+          1,
+          3,
+          GL_FLOAT,
+          GL_FALSE,
+          static_cast<GLint>(sizeof(glm::vec3))
+        );
+        glVertexArrayAttribBinding(mesh.vao, 1, 0);
+
+        glEnableVertexArrayAttrib(mesh.vao, 2);
+        glVertexArrayAttribFormat(
+          mesh.vao,
+          2,
+          2,
+          GL_FLOAT,
+          GL_FALSE,
+          static_cast<GLint>(sizeof(glm::vec3))
+        );
+        glVertexArrayAttribBinding(mesh.vao, 2, 0);
       }
   };
 }
