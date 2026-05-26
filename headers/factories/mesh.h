@@ -88,12 +88,12 @@ namespace blossom::factory
 
         if (uv_.empty())
         {
-          uv_.assign(points_.size(), glm::vec2());
+          uv_.assign(points_.size(), glm::vec2(0.0F));
         }
 
         if (normals_.empty())
         {
-          normals_ = points_;
+          normals_.assign(points_.size(), glm::vec3(0.0F));
         }
 
         for (size_t i = 0; i < points_.size(); i++)
