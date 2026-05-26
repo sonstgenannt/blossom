@@ -19,7 +19,7 @@ namespace blossom::system
     public:
       static void update(entt::registry& registry)
       {
-        glm::mat4 view_projection_matrix(1.0F);
+        std::array<glm::mat4, 3> mvp_matrices;
 
         auto active_camera_view = registry.view<component::tag::active_camera>();
         bool active_camera_exists = !active_camera_view.empty();
@@ -30,20 +30,20 @@ namespace blossom::system
 
           if (auto* matrix_projection = registry.try_get<component::matrix::projection>(active_camera_entity))
           {
-            view_projection_matrix = matrix_projection->data;
-
-            if (auto* matrix_view = registry.try_get<component::matrix::view>(active_camera_entity))
-            {
-              view_projection_matrix *= matrix_view->data;
-            }
-            else
-            {
-              std::cout << "WARNING (blossom::system::render): Active camera doesn't have component::matrix::projection." << "\n";
-            }
+            mvp_matrices[0] = matrix_projection->data;
           }
           else
           {
             std::cout << "WARNING (blossom::system::render): Active camera doesn't have component::matrix::view." << "\n";
+          }
+
+          if (auto* matrix_view = registry.try_get<component::matrix::view>(active_camera_entity))
+          {
+            mvp_matrices[1] = matrix_view->data;
+          }
+          else
+          {
+            std::cout << "WARNING (blossom::system::render): Active camera doesn't have component::matrix::projection." << "\n";
           }
         }
         else
@@ -52,22 +52,35 @@ namespace blossom::system
         }
 
         auto mesh_view = registry.view<component::matrix::transform, component::mesh>();
-        for ( auto [entity, transform_matrix, mesh] : mesh_view.each() )
+        for ( auto [entity, matrix_transform, mesh] : mesh_view.each() )
         {
-          const auto MVP_MATRIX = view_projection_matrix * transform_matrix.data;
-          draw_(mesh, MVP_MATRIX);
+          mvp_matrices[2] = matrix_transform.data;
+          draw_(mesh, mvp_matrices);
         }
       }
 
     private:
-      static void draw_(const component::mesh& mesh, const glm::mat4& mvp_matrix)
+      static void draw_(const component::mesh& mesh, const std::array<glm::mat4, 3>& mvp_matrix)
       {
         glUseProgram(mesh.shader_program);
         glUniformMatrix4fv(
-            mesh.uniform_location_mvp, 
+            mesh.uniform_location_projection, 
             1, 
             GL_FALSE, 
-            glm::value_ptr(mvp_matrix) );
+            glm::value_ptr(mvp_matrix[0])
+        ); 
+        glUniformMatrix4fv(
+          mesh.uniform_location_view,
+          1,
+          GL_FALSE,
+          glm::value_ptr(mvp_matrix[1])
+        );
+        glUniformMatrix4fv(
+          mesh.uniform_location_model,
+          1,
+          GL_FALSE,
+          glm::value_ptr(mvp_matrix[2])
+        );
 
         glBindVertexArray(mesh.vao);
         glPolygonMode(GL_FRONT_AND_BACK, mesh.polygon_mode);
