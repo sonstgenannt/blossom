@@ -80,6 +80,7 @@ namespace blossom::factory
 
     return mesh(registry)
       .with_vertices(sphere_vertices)
+      .with_normals(sphere_vertices)
       .with_uv(sphere_uv)
       .with_indices(sphere_indices)
       .with_scale(SPHERE_SCALE)
