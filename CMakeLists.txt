@@ -42,7 +42,6 @@ add_example(triangle)
 add_example(view)
 add_example(lines)
 add_example(squiggle)
-add_example(lighting)
 
 find_package(GTest REQUIRED)
 set(TEST_SOURCES
