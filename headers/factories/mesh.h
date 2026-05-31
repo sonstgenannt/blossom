@@ -160,6 +160,12 @@ namespace blossom::factory
         }
 
         // Vertex size
+        //
+        // (X, Y, Z) - vertex point position
+        // (A, B, C) - vertex normal
+        // (U, V) - vertex texture coordinate
+        // 
+        //                     | X | Y | Z         | A | B | C         | U | V |
         const GLsizei stride = sizeof(glm::vec3) + sizeof(glm::vec3) + sizeof(glm::vec2);
 
         glVertexArrayElementBuffer(mesh.vao, mesh.ebo);
