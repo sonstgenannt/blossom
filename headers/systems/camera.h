@@ -17,10 +17,10 @@ namespace blossom::system
       static void update(entt::registry& registry)
       {
         auto view = registry.view<component::matrix::transform, component::matrix::view, component::matrix::projection, component::camera>();
-        for (auto [entity, matrix_transform, matrix_view, matrix_projection, camera] : view.each())
+        for (auto [entity, transform, view, projection, camera] : view.each())
         {
-          matrix_view.data = glm::inverse(matrix_transform.data);
-          matrix_projection.data = calculate_projection_matrix_(camera);
+          view.data = glm::inverse(transform.data);
+          projection.data = calculate_projection_matrix_(camera);
         }
       }
 
