@@ -23,7 +23,7 @@ namespace blossom::component
 
     camera_type type = camera_type::ORTHOGRAPHIC;
 
-    GLuint ubo;
+    GLuint ubo = 0;
   };
 }
 
