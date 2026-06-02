@@ -14,9 +14,9 @@ namespace blossom::system
       static void update(entt::registry& registry)
       {
         auto view = registry.view<component::transform, component::matrix::transform>();
-        for ( auto [entity, transform, matrix_transform] : view.each() )
+        for ( auto [entity, transform, model] : view.each() )
         {
-          update_transform_matrix_(transform, matrix_transform);
+          update_transform_matrix_(transform, model);
         }
       }
 
