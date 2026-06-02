@@ -21,7 +21,7 @@ namespace blossom::system
       }
 
     private:
-      static void update_transform_matrix_(const component::transform& transform, component::matrix::transform& matrix_transform)
+      static void update_transform_matrix_(const component::transform& transform, component::matrix::transform& model)
       {
         auto local_to_world = glm::mat4(1.0F);
 
@@ -31,7 +31,7 @@ namespace blossom::system
         local_to_world = glm::rotate(local_to_world, glm::radians(transform.rotation.z), glm::vec3(0.0F, 0.0F, 1.0F));
         local_to_world = glm::scale(local_to_world, transform.scale);
 
-        matrix_transform.data = local_to_world;
+        model.data = local_to_world;
       }
   };
 }
