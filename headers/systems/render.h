@@ -35,7 +35,7 @@ namespace blossom::system
           }
           else
           {
-            std::cout << "WARNING (blossom::system::render): Active camera doesn't have component::matrix::view." << "\n";
+            std::cout << "WARNING (blossom::system::render): Active camera doesn't have component::matrix::projection." << "\n";
           }
 
           if (auto* matrix_view = registry.try_get<component::matrix::view>(active_camera_entity))
@@ -44,7 +44,7 @@ namespace blossom::system
           }
           else
           {
-            std::cout << "WARNING (blossom::system::render): Active camera doesn't have component::matrix::projection." << "\n";
+            std::cout << "WARNING (blossom::system::render): Active camera doesn't have component::matrix::view." << "\n";
           }
 
           GLuint ubo = (registry.try_get<component::camera>(active_camera_entity))->ubo;
