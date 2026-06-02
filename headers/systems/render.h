@@ -29,18 +29,18 @@ namespace blossom::system
         {
           auto active_camera_entity = active_camera_view.front();
 
-          if (auto* matrix_projection = registry.try_get<component::matrix::projection>(active_camera_entity))
+          if (auto* projection = registry.try_get<component::matrix::projection>(active_camera_entity))
           {
-            mvp_matrices[0] = matrix_projection->data;
+            mvp_matrices[0] = projection->data;
           }
           else
           {
             std::cout << "WARNING (blossom::system::render): Active camera doesn't have component::matrix::projection." << "\n";
           }
 
-          if (auto* matrix_view = registry.try_get<component::matrix::view>(active_camera_entity))
+          if (auto* view = registry.try_get<component::matrix::view>(active_camera_entity))
           {
-            mvp_matrices[1] = matrix_view->data;
+            mvp_matrices[1] = view->data;
           }
           else
           {
