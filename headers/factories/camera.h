@@ -31,7 +31,7 @@ namespace blossom::factory
       {
         auto& ubo = registry_.get<component::camera>(entity_).ubo;
         glCreateBuffers(1, &ubo);
-        glNamedBufferData(ubo, 2 * sizeof(glm::mat4), NULL, GL_DYNAMIC_DRAW);
+        glNamedBufferData(ubo, 2 * sizeof(glm::mat4), nullptr, GL_DYNAMIC_DRAW);
         glBindBufferBase(GL_UNIFORM_BUFFER, 0, ubo);
       }
 
